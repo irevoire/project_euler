@@ -1,6 +1,8 @@
 use rug::Integer;
 use rug::integer::IsPrime;
 use rug::ops::Pow;
+use std::thread;
+use std::sync::mpsc;
 
 fn pgp(a: Integer, n: &Integer) -> Integer {
     a.pow_mod(&Integer::from(n - 1), n).unwrap()
@@ -24,22 +26,33 @@ fn gen(n: &Integer) -> Integer {
 }
 
 fn main() {
-    let mut n = Integer::from(1);
-    let mut cpt = Integer::from(0);
+    let end = 50_000_000;
+    let core = num_cpus::get();
+    let split = end / core;
+    let (tx, rx) = mpsc::channel();
 
-    while n < 50_000_000 {
-        n += 1;
 
-        let num = gen(&n);
-        let prime = num.is_probably_prime(50);
-        if prime == IsPrime::Yes { cpt += 1 }
-        if prime == IsPrime::Probably { 
-            if is_prime(&num) { cpt += 1 }
-        }
-        if n.is_divisible(&Integer::from(1_000_000)) {
-            println!("new percentage {} stop at 50_000_000", n);
-        }
+    for i in 0..core {
+        let tx1 = mpsc::Sender::clone(&tx);
+        let slice = (split * i)..(split * (i + 1));
+
+        thread::spawn(move || {
+            let mut cpt = 0;
+
+            for n in slice {
+                let num = gen(&Integer::from(n));
+                let prime = num.is_probably_prime(50);
+                if prime == IsPrime::Yes { cpt += 1 }
+                if prime == IsPrime::Probably {
+                    if is_prime(&num) { cpt += 1 }
+                }
+            }
+
+            tx1.send(cpt).unwrap();
+        });
     }
+    drop(tx);
 
+    let cpt: u64 = rx.iter().sum();
     println!("There is {} primes number", cpt);
 }
