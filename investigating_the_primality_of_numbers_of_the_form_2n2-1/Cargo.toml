@@ -1,0 +1,8 @@
+[package]
+name = "investigating_the_primality_of_numbers_of_the_form_2n2-1"
+version = "0.1.0"
+authors = ["Thomas Campistron <irevoire@hotmail.fr>"]
+edition = "2018"
+
+[dependencies]
+rug = "*"
