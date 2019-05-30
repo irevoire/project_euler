@@ -1,3 +1,6 @@
+use rayon::prelude::*;
+use std::sync::Mutex;
+
 const MAX: u64 = 10000;
 
 fn sum_of_divisors(n: u64) -> u64 {
@@ -12,20 +15,26 @@ fn sum_of_divisors(n: u64) -> u64 {
     sum
 }
 fn main() {
-    let mut amicables = Vec::new();
+    let amicables = Mutex::new(Vec::new());
 
-    for n in 1..MAX {
-        if amicables.contains(&n) {
-            continue;
+    (1..MAX).into_par_iter().for_each(|n| {
+        if amicables.lock().unwrap().contains(&n) {
+            return;
         }
 
         let sum = sum_of_divisors(n);
         if n != sum && sum_of_divisors(sum) == n {
-            amicables.push(sum);
-            amicables.push(n);
+            {
+                let mut ami = amicables.lock().unwrap();
+                ami.push(sum);
+                ami.push(n);
+            }
         }
-    }
+    });
 
     println!("amicables: {:?}", amicables);
-    println!("sum of amicables: {:?}", amicables.iter().sum::<u64>());
+    println!(
+        "sum of amicables: {}",
+        amicables.lock().unwrap().iter().sum::<u64>()
+    );
 }
