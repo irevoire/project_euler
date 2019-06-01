@@ -13,6 +13,7 @@ fn main() {
     let cipher = cipher::init(&cipher);
 
     let mut max = 0;
+    let mut final_decipher = String::new();
     ('!' as u8..='~' as u8)
         .combinations(3)
         .for_each(|combination| {
@@ -25,9 +26,10 @@ fn main() {
 
                 let decipher = decipher.unwrap();
                 let nwords = dict::count_words(&decipher, &dict);
-                let lala = std::str::from_utf8(&pass).unwrap();
+
                 if nwords > max {
                     max = nwords;
+                    final_decipher = decipher.to_string(); // a lot of useless copy
                     println!(
                         "Using the pass {} for {} english words",
                         std::str::from_utf8(&pass).unwrap(),
@@ -37,4 +39,10 @@ fn main() {
                 }
             })
         });
+
+    let res = final_decipher
+        .as_bytes()
+        .iter()
+        .fold(0 as u32, |acc, el| acc + *el as u32);
+    println!("The sum of all the bytes is: {}", res);
 }
