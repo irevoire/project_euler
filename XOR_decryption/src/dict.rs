@@ -12,3 +12,12 @@ pub fn init(path: &str) -> HashSet<String> {
 
     words
 }
+
+pub fn count_words(text: &str, dict: &HashSet<String>) -> u32 {
+    text.split(" ").fold(0, |acc, word| {
+        if dict.contains(word) {
+            return acc + 1;
+        }
+        return acc;
+    })
+}
