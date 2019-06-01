@@ -1,4 +1,6 @@
 use itertools::Itertools;
+use rayon::prelude::*;
+use std::sync::Mutex;
 
 mod args;
 mod cipher;
@@ -12,10 +14,12 @@ fn main() {
     let dict = dict::init(&dict);
     let cipher = cipher::init(&cipher);
 
-    let mut max = 0;
-    let mut final_decipher = String::new();
-    ('!' as u8..='~' as u8)
+    let mut max = Mutex::new(0);
+    let mut final_decipher = Mutex::new(String::new());
+    ('!' as u8..'~' as u8)
         .combinations(3)
+        .collect::<Vec<Vec<u8>>>() // does this destruct my memory?
+        .into_par_iter()
         .for_each(|combination| {
             let len = combination.len();
             itertools::Permutations::from_vals(combination, len).for_each(|pass| {
@@ -27,9 +31,11 @@ fn main() {
                 let decipher = decipher.unwrap();
                 let nwords = dict::count_words(&decipher, &dict);
 
-                if nwords > max {
-                    max = nwords;
-                    final_decipher = decipher.to_string(); // a lot of useless copy
+                let mut max = max.lock().unwrap();
+                if nwords > *max {
+                    *max = nwords;
+                    // probably a lot of useless copy
+                    *final_decipher.lock().unwrap() = decipher.to_string();
                     println!(
                         "Using the pass {} for {} english words",
                         std::str::from_utf8(&pass).unwrap(),
@@ -41,6 +47,8 @@ fn main() {
         });
 
     let res = final_decipher
+        .lock()
+        .unwrap()
         .as_bytes()
         .iter()
         .fold(0 as u32, |acc, el| acc + *el as u32);

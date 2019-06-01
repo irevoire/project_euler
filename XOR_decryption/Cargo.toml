@@ -11,3 +11,4 @@ clap = "*"
 # at the time of writing this file the permutations features was not in itertools
 # if this branch get deleted then we can hope by requiring only itertool it will works
 itertools = { git = "https://github.com/tobz1000/rust-itertools", branch = "permutations" }
+rayon = "*"
