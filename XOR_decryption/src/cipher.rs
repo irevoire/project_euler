@@ -11,7 +11,7 @@ pub fn init(path: &str) -> Vec<u8> {
 
     buffer
         .split(|c| *c == ',' as u8)
-        .map(|n| str::from_utf8(n).unwrap().parse::<u8>().unwrap())
+        .map(|n| str::from_utf8(n).unwrap().trim().parse::<u8>().unwrap())
         .collect::<Vec<u8>>()
 }
 
