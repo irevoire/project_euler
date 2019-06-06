@@ -1,37 +1,25 @@
-fn apply_fact(coins: &[u32], factor: &[u32]) -> u32 {
-    coins
-        .iter()
-        .zip(factor.iter())
-        .fold(0, |acc, (c, f)| acc + c * f)
-}
-
-fn increment(coins: &[u32], factor: &mut [u32]) {
-    for i in 0..factor.len() {
-        if factor[i] * coins[i] >= 200 {
-            factor[i] = 0;
-        } else {
-            factor[i] += 1;
-            break;
+fn _possibilities(amount: i32, coins: &[u32]) -> u32 {
+    let mut sum = 0;
+    if coins.is_empty() {
+        return 1;
+    }
+    for (i, &c) in coins.iter().enumerate() {
+        match amount - c as i32 {
+            0 => sum += 1,
+            n if n > 0 => sum += _possibilities(n, &coins[i..]),
+            _ => (), // nothing on negative
         }
     }
+    sum
+}
+
+fn possibilities(c: u32, coins: &[u32]) -> u32 {
+    _possibilities(c as i32, coins)
 }
 
 fn main() {
     let mut coins = [1, 2, 5, 10, 20, 50, 100, 200];
-    let mut factor = [0; 8];
+    coins.reverse();
 
-    println!("factor: {:?}", factor);
-    println!("coins: {:?}", coins);
-
-    let mut cpt = 0;
-    loop {
-        if apply_fact(&coins, &factor) == 200 {
-            cpt += 1;
-        }
-        if *factor.last().unwrap() == 1 {
-            break;
-        }
-        increment(&coins, &mut factor);
-    }
-    println!("res = {}", cpt);
+    println!("res: {:?}", possibilities(200, &coins));
 }
