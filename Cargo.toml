@@ -33,7 +33,6 @@ members = [
 	"summation_of_primes",
 	"digit_fifth_powers",
 	"maximum_path_sum_I",
-	"target",
 	"distinct_powers",
 	"maximum_path_sum_II",
 	"triangular_pentagonal_and_hexagonal",

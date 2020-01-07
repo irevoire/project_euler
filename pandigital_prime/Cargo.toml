@@ -1,5 +1,5 @@
 [package]
-name = "largest_prime_factor"
+name = "pandigital_prime"
 version = "0.1.0"
 authors = ["Thomas Campistron <irevoire@hotmail.fr>"]
 edition = "2018"
