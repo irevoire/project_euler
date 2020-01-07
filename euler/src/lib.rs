@@ -1,7 +1,4 @@
-/*
-use std::cmp::Eq;
-use std::ops::{Div, Rem};
-*/
+mod macros;
 
 pub trait Divisors {
     fn divisors(self) -> Box<dyn Iterator<Item = Self>>;
@@ -27,22 +24,4 @@ macro_rules! impl_divisors {
     };
 }
 
-impl_divisors!(u8);
-impl_divisors!(u32);
-impl_divisors!(u64);
-impl_divisors!(u128);
-impl_divisors!(i8);
-impl_divisors!(i32);
-impl_divisors!(i64);
-impl_divisors!(i128);
-
-/*
-impl<T> Divisors for T
-where
-    T: Rem<Output = T> + Div<Output = T> + Eq,
-{
-    fn divisors(self) -> Box<dyn Iterator<Item = Self>> {
-        Box::new((1..self / 2 as T).filter(move |divisor| self % divisor == 0))
-    }
-}
-*/
+impl_for!(impl_divisors: unsigned);

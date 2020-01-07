@@ -1,0 +1,5 @@
+[workspace]
+members = [
+	"euler",
+	"non_abundant_sums"
+]

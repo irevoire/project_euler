@@ -1,4 +1,4 @@
-use non_abundant_sums::Divisors;
+use euler::Divisors;
 
 fn main() {
     let nums = (1..28123)
