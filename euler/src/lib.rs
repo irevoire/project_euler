@@ -1,4 +1,6 @@
 mod macros;
+pub mod prime;
+pub use prime::*;
 
 pub trait Divisors {
     fn divisors(self) -> Box<dyn Iterator<Item = Self>>;

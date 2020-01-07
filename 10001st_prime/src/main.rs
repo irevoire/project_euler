@@ -6,17 +6,12 @@
  * What is the 10 001st prime number?
  */
 
-mod prime;
-
 fn main() {
-    let limit : u64 = 10001;
-    let mut iter : u64 = 0;
+    let limit = 10001;
 
-    for prime in prime::Prime::new() {
-        iter += 1;
-        if iter == limit {
-            println!("prime is {}", prime);
-            break
-        }
-    }
+    let prime = euler::PrimeIter::<u64>::new()
+        .skip(limit - 1)
+        .next()
+        .unwrap();
+    println!("prime is {}", prime);
 }

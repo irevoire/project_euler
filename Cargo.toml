@@ -1,5 +1,8 @@
 [workspace]
 members = [
 	"euler",
-	"non_abundant_sums"
+	"non_abundant_sums",
+	"10001st_prime",
+	"largest_prime_factor",
+	"summation_of_primes",
 ]

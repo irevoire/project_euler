@@ -6,15 +6,13 @@
  * Find the sum of all the primes below two million.
  */
 
-mod prime;
-
 fn main() {
-    let limit : u64 = 2000000;
-    let mut sum : u64 = 0;
+    let limit: u64 = 2000000;
+    let mut sum: u64 = 0;
 
-    for prime in prime::Prime::new() {
+    for prime in euler::PrimeIter::<u64>::new() {
         if prime > limit {
-            break
+            break;
         }
         sum += prime;
     }

@@ -2,6 +2,7 @@
 macro_rules! impl_for {
     ($macro:tt: unsigned) => {
         $macro!(u8);
+        $macro!(u16);
         $macro!(u32);
         $macro!(u64);
         $macro!(u128);
@@ -10,6 +11,7 @@ macro_rules! impl_for {
 
     ($macro:tt: signed) => {
         $macro!(i8);
+        $macro!(i16);
         $macro!(i32);
         $macro!(i64);
         $macro!(i128);
