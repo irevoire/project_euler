@@ -1,5 +1,6 @@
 pub trait Prime {
     fn is_prime(self) -> bool;
+    fn all_prime_divisors(self) -> Box<dyn Iterator<Item = Self>>;
 }
 
 macro_rules! impl_prime {
@@ -16,6 +17,10 @@ macro_rules! impl_prime {
                     return false;
                 }
                 !(3..self / 2).step_by(2).any(|el| self % el == 0)
+            }
+
+            fn all_prime_divisors(self) -> Box<dyn Iterator<Item = Self>> {
+                PrimeFactor::<Self>::new(self)
             }
         }
     };
@@ -40,6 +45,28 @@ mod tests {
         assert_eq!(23456789_u32.is_prime(), true);
         assert_eq!(123456789_u32.is_prime(), false);
     }
+
+    #[test]
+    fn prime_divisors() {
+        let empty: Vec<u64> = Vec::new();
+        assert_eq!(empty, 0_u64.all_prime_divisors().collect::<Vec<u64>>());
+        assert_eq!(empty, 1_u64.all_prime_divisors().collect::<Vec<u64>>());
+        assert_eq!(vec![2], 2_u64.all_prime_divisors().collect::<Vec<u64>>());
+        assert_eq!(vec![2, 2], 4_u64.all_prime_divisors().collect::<Vec<u64>>());
+        assert_eq!(
+            vec![2, 2, 2],
+            8_u64.all_prime_divisors().collect::<Vec<u64>>()
+        );
+        assert_eq!(vec![2, 3], 6_u64.all_prime_divisors().collect::<Vec<u64>>());
+        assert_eq!(
+            vec![3, 7],
+            21_u64.all_prime_divisors().collect::<Vec<u64>>()
+        );
+        assert_eq!(
+            vec![2, 2, 2, 3, 3],
+            2088_u64.all_prime_divisors().collect::<Vec<u64>>()
+        );
+    }
 }
 
 pub struct PrimeIter<T> {
@@ -50,11 +77,11 @@ pub struct PrimeIter<T> {
 macro_rules! impl_prime_iter {
     ($t:ty) => {
         impl PrimeIter<$t> {
-            pub fn new() -> Self {
-                PrimeIter {
+            pub fn new() -> Box<dyn Iterator<Item = $t>> {
+                Box::new(PrimeIter::<$t> {
                     current: 1,
                     base: Vec::new(),
-                }
+                })
             }
 
             pub fn is_prime(&self, n: $t) -> bool {
@@ -86,3 +113,42 @@ macro_rules! impl_prime_iter {
 }
 
 crate::impl_for!(impl_prime_iter: unsigned);
+
+pub struct PrimeFactor<T> {
+    current: T,
+    primes: Box<dyn Iterator<Item = T>>,
+    prime: T,
+}
+
+macro_rules! impl_prime_factor {
+    ($t:ty) => {
+        impl PrimeFactor<$t> {
+            pub fn new(n: $t) -> Box<dyn Iterator<Item = $t>> {
+                let mut primes = PrimeIter::<$t>::new();
+                Box::new(PrimeFactor::<$t> {
+                    current: n,
+                    prime: primes.next().unwrap(),
+                    primes,
+                })
+            }
+        }
+
+        impl Iterator for PrimeFactor<$t> {
+            type Item = $t;
+
+            fn next(&mut self) -> Option<Self::Item> {
+                while self.current % self.prime != 0 {
+                    if self.current < self.prime {
+                        return None;
+                    }
+                    self.prime = self.primes.next().unwrap();
+                    // println!("trying: {}", self.prime);
+                }
+                self.current /= self.prime;
+                Some(self.prime)
+            }
+        }
+    };
+}
+
+crate::impl_for!(impl_prime_factor: unsigned);

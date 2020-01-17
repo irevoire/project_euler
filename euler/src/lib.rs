@@ -1,29 +1,62 @@
+#![feature(test)]
+
 mod macros;
+
+pub mod divisors;
+pub mod num;
 pub mod prime;
+
+pub use divisors::*;
+pub use num::*;
 pub use prime::*;
 
-pub trait Divisors {
-    fn divisors(self) -> Box<dyn Iterator<Item = Self>>;
-    fn sum_of_divisors(self) -> Self;
-    fn is_abundant_number(self) -> bool;
+#[cfg(test)]
+mod tests {
+    extern crate test;
+    use super::*;
+    use test::Bencher;
+
+    #[bench]
+    fn small_bench_prime(b: &mut Bencher) {
+        b.iter(|| {
+            let mut res = 0;
+            for i in 0_u64..1000 {
+                res ^= i.all_prime_divisors().count();
+            }
+            res
+        });
+    }
+
+    #[bench]
+    fn small_bench_divisors(b: &mut Bencher) {
+        b.iter(|| {
+            let mut res = 0;
+            for i in 0_u64..1000 {
+                res ^= i.prime_divisors().count();
+            }
+            res
+        });
+    }
+
+    #[bench]
+    fn large_bench_prime(b: &mut Bencher) {
+        b.iter(|| {
+            let mut res = 0;
+            for i in 1_000_000_u64..1_000_100 {
+                res ^= i.all_prime_divisors().count();
+            }
+            res
+        });
+    }
+
+    #[bench]
+    fn large_bench_divisors(b: &mut Bencher) {
+        b.iter(|| {
+            let mut res = 0;
+            for i in 1_000_000_u64..1_000_100 {
+                res ^= i.prime_divisors().count();
+            }
+            res
+        });
+    }
 }
-
-macro_rules! impl_divisors {
-    ($t:ty) => {
-        impl Divisors for $t {
-            fn divisors(self) -> Box<dyn Iterator<Item = Self>> {
-                Box::new((1..self / 2 + 1).filter(move |divisor| self % divisor == 0))
-            }
-
-            fn sum_of_divisors(self) -> Self {
-                self.divisors().sum()
-            }
-
-            fn is_abundant_number(self) -> bool {
-                self < self.sum_of_divisors()
-            }
-        }
-    };
-}
-
-impl_for!(impl_divisors: unsigned);

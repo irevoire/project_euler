@@ -42,4 +42,5 @@ members = [
 	"names_scores",
 	"non_abundant_sums",
 	"consecutive_prime_sum",
+	"distinct_primes_factors",
 	]
