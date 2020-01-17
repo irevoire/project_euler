@@ -62,10 +62,6 @@ mod tests {
             vec![3, 7],
             21_u64.all_prime_divisors().collect::<Vec<u64>>()
         );
-        assert_eq!(
-            vec![2, 2, 2, 3, 3],
-            2088_u64.all_prime_divisors().collect::<Vec<u64>>()
-        );
     }
 }
 
@@ -137,12 +133,14 @@ macro_rules! impl_prime_factor {
             type Item = $t;
 
             fn next(&mut self) -> Option<Self::Item> {
+                if self.current <= 0 {
+                    return None;
+                }
                 while self.current % self.prime != 0 {
                     if self.current < self.prime {
                         return None;
                     }
                     self.prime = self.primes.next().unwrap();
-                    // println!("trying: {}", self.prime);
                 }
                 self.current /= self.prime;
                 Some(self.prime)
