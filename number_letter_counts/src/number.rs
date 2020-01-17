@@ -8,10 +8,10 @@ fn reverse(n: u32) -> u32 {
         n = n / 10;
 
         if n == 0 {
-            break
+            break;
         }
     }
-    return rev
+    return rev;
 }
 
 pub struct Number {
@@ -20,7 +20,9 @@ pub struct Number {
 
 impl Number {
     pub fn new() -> Number {
-        let mut s = Number { num: std::collections::HashMap::new() };
+        let mut s = Number {
+            num: std::collections::HashMap::new(),
+        };
 
         s.num.insert(0, "".to_string());
         s.num.insert(1, "one".to_string());
@@ -52,12 +54,8 @@ impl Number {
         s.num.insert(90, "ninety".to_string());
         s.num.insert(100, "hundred".to_string());
         s.num.insert(1000, "thousand".to_string());
-        
-        return s;
-    }
 
-    pub fn print(&self) {
-        println!("{:?}", self.num);
+        return s;
     }
 
     pub fn parse(&mut self, n: u32) -> String {
@@ -79,7 +77,8 @@ impl Number {
                 res.push_str(&self.parse(n % 100));
                 res.push_str(" ");
             }
-        } else { // 20 < n < 100
+        } else {
+            // 20 < n < 100
             let base = (rev % 10) * 10;
             res.push_str(&self.num.get(&base).unwrap());
             res.push_str("-");

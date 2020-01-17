@@ -1,4 +1,3 @@
-use euler::Prime;
 use std::collections::HashSet;
 use std::iter::FromIterator;
 

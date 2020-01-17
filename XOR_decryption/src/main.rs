@@ -14,15 +14,15 @@ fn main() {
     let dict = dict::init(&dict);
     let cipher = cipher::init(&cipher);
 
-    let mut max = Mutex::new(0);
-    let mut final_decipher = Mutex::new(String::new());
+    let max = Mutex::new(0);
+    let final_decipher = Mutex::new(String::new());
     ('!' as u8..'~' as u8)
         .combinations(3)
         .collect::<Vec<Vec<u8>>>() // does this destruct my memory?
         .into_par_iter()
         .for_each(|combination| {
             let len = combination.len();
-            itertools::Permutations::from_vals(combination, len).for_each(|pass| {
+            combination.into_iter().permutations(len).for_each(|pass| {
                 let decipher = cipher::decipher(&cipher, &pass);
                 if decipher.is_none() {
                     return;

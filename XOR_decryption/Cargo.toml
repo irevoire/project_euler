@@ -1,5 +1,5 @@
 [package]
-name = "XOR_decryption"
+name = "xor_decryption"
 version = "0.1.0"
 authors = ["irevoire <irevoire@hotmail.fr>"]
 edition = "2018"
@@ -7,8 +7,6 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = "*"
-# at the time of writing this file the permutations features was not in itertools
-# if this branch get deleted then we can hope by requiring only itertool it will works
-itertools = { git = "https://github.com/tobz1000/rust-itertools", branch = "permutations" }
-rayon = "*"
+clap = "2.33.0"
+itertools = "0.8.2"
+rayon = "1.3.0"

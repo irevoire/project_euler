@@ -1,8 +1,8 @@
-use euler::Divisors;
+use euler::Num;
 
 fn main() {
     let nums = (1..28123)
-        .filter(|el| el.is_abundant_number())
+        .filter(|el| el.is_abundant())
         .collect::<Vec<u32>>();
     let mut abundant_sum = 0;
     for i in 1..28123 {

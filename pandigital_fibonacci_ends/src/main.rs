@@ -1,5 +1,3 @@
-use rug::Integer;
-
 mod iter;
 
 fn is_pandigital(n: u64) -> bool {
@@ -7,17 +5,19 @@ fn is_pandigital(n: u64) -> bool {
     let mut n = n;
     loop {
         let d = (n % 10) as usize;
-        if d == 0 { return false }
+        if d == 0 {
+            return false;
+        }
         if digits[d] != 0 {
-            return false
+            return false;
         }
         digits[d] = 1;
         if n < 10 {
-            break
+            break;
         }
         n /= 10;
     }
-    return digits.iter().fold(0, |acc, el| acc + el) == 9
+    return digits.iter().fold(0, |acc, el| acc + el) == 9;
 }
 
 fn main() {
