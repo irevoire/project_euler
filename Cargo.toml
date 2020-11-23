@@ -1,6 +1,5 @@
 [workspace]
 members = [
-	"10001st_prime",
 	"euler",
 	"number_letter_counts",
 	"even_fibo",
@@ -44,4 +43,5 @@ members = [
 	"consecutive_prime_sum",
 	"distinct_primes_factors",
 	"reciprocal_cycles",
+	"pandigital_multiples",
 	]
