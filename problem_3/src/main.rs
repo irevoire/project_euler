@@ -8,7 +8,7 @@ fn main() {
     let number = 600851475143;
     let mut largest_prime = 1;
 
-    for prime in euler::PrimeIter::<u64>::new() {
+    for prime in project_euler::PrimeIter::<u64>::new() {
         if prime > number / 2 {
             break;
         }

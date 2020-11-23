@@ -3,7 +3,7 @@ use std::iter::FromIterator;
 
 fn main() {
     let limit = 1000000;
-    let primes: Vec<u64> = euler::PrimeIter::<u64>::new()
+    let primes: Vec<u64> = project_euler::PrimeIter::<u64>::new()
         .take_while(|p| *p < limit)
         .collect();
     let hash_primes: HashSet<&u64> = HashSet::from_iter(primes.iter().clone());

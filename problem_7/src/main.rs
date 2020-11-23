@@ -9,7 +9,7 @@
 fn main() {
     let limit = 10001;
 
-    let prime = euler::PrimeIter::<u64>::new()
+    let prime = project_euler::PrimeIter::<u64>::new()
         .skip(limit - 1)
         .next()
         .unwrap();

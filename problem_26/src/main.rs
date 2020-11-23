@@ -1,4 +1,4 @@
-use euler::Divisors;
+use project_euler::Divisors;
 
 fn main() {
     let range = 1..1000;

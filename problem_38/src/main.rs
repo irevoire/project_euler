@@ -1,4 +1,4 @@
-use euler::num::Num;
+use project_euler::num::Num;
 use std::collections::HashSet;
 
 fn main() {

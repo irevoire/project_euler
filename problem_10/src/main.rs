@@ -10,7 +10,7 @@ fn main() {
     let limit: u64 = 2000000;
     let mut sum: u64 = 0;
 
-    for prime in euler::PrimeIter::<u64>::new() {
+    for prime in project_euler::PrimeIter::<u64>::new() {
         if prime > limit {
             break;
         }

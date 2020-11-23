@@ -1,4 +1,4 @@
-use euler::Prime;
+use project_euler::Prime;
 
 const NB: u64 = 4;
 

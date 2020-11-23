@@ -1,4 +1,4 @@
-use euler::Num;
+use project_euler::Num;
 
 fn main() {
     let nums = (1..28123)
